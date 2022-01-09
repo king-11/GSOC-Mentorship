@@ -3,6 +3,7 @@ package extractor
 import (
 	"encoding/json"
 	"io"
+	"sort"
 )
 
 func GetMentors(f io.Reader) (map[string]*Person, error) {
@@ -28,6 +29,9 @@ func GetMentees(f io.Reader) ([]*Mentee, error) {
 	for _, val := range mentees {
 		val.Github = getGithubHandle(val.Github)
 	}
+	sort.Slice(mentees, func(i, j int) bool {
+		return mentees[i].Email < mentees[j].Email
+	})
 	return mentees, nil
 }
 

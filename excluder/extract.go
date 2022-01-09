@@ -3,6 +3,7 @@ package excluder
 import (
 	"encoding/json"
 	"io"
+	"sort"
 
 	"github.com/king-11/mentorship/extractor"
 )
@@ -20,5 +21,6 @@ func GetMentees(f io.Reader) ([]string, error) {
 			emails = append(emails, val.Email)
 		}
 	}
+	sort.Strings(emails)
 	return emails, nil
 }
