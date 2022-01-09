@@ -9,7 +9,7 @@ type Person struct {
 
 type Mentorship struct {
 	Mentor  Person
-	Mentees []Mentee
+	Mentees []*Mentee
 }
 
 func(m *Mentorship) String() string {
