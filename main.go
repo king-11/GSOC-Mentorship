@@ -3,8 +3,10 @@ package main
 import (
 	"log"
 	"os"
+	"strings"
 
 	"github.com/joho/godotenv"
+	"github.com/king-11/mentorship/excluder"
 	"github.com/king-11/mentorship/extractor"
 	"github.com/king-11/mentorship/mailer"
 )
@@ -20,7 +22,6 @@ func main() {
     log.Fatal(err)
   }
   defer f.Close()
-
   mentors, err := extractor.GetMentors(f)
   if err != nil {
     log.Fatal(err)
@@ -31,12 +32,39 @@ func main() {
     log.Fatal(err)
   }
   defer fl.Close()
-
-  mentees, err := extractor.GetMentees(fl)
+  mentees_all, err := extractor.GetMentees(fl)
   if err != nil {
     log.Fatal(err)
   }
 
+  fe, err := os.Open("mentees_1.json")
+  if err != nil {
+    log.Fatal(err)
+  }
+  defer fe.Close()
+  mentees_done, err := excluder.GetMentees(fe)
+  if err != nil {
+    log.Fatal(err)
+  }
+
+
+  mentees := make([]*extractor.Mentee, 0)
+  for _, val := range mentees_all {
+    check := false
+    if strings.Contains(val.Email, ",") {
+      continue
+    }
+    for _, v := range mentees_done {
+      if val.Email == v {
+        check = true
+        break
+      }
+    }
+
+    if !check {
+      mentees = append(mentees, val)
+    }
+  }
   mentorships := extractor.SetUpMentorship(mentees, mentors)
 
   err = godotenv.Load(".env")
