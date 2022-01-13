@@ -39,16 +39,15 @@ func SetUpMentorship(mentees []*Mentee, mentors map[string]*Person) []*Mentorshi
 	mentorships := make([]*Mentorship, 0)
 	for name, val := range mentors {
 		mentorship := &Mentorship{
-			Mentor: *val,
+			Mentor:  val,
+			Mentees: []*Mentee{},
 		}
-		currentMentees := []*Mentee{}
 		for _, mentee := range mentees {
 			if mentee.Mentor == name {
-				currentMentees = append(currentMentees, mentee)
+				mentorship.Mentees = append(mentorship.Mentees, mentee)
 			}
 		}
-		mentorship.Mentees = currentMentees
-		if len(currentMentees) > 0 {
+		if len(mentorship.Mentees) > 0 {
 			mentorships = append(mentorships, mentorship)
 		}
 	}

@@ -8,12 +8,12 @@ type Person struct {
 }
 
 type Mentorship struct {
-	Mentor  Person
+	Mentor  *Person
 	Mentees []*Mentee
 }
 
-func(m *Mentorship) String() string {
-	return fmt.Sprintf("%s\t:%+v", m.Mentor.Name, m.GetEmails())
+func(m *Mentorship) GetMentorNames() string {
+	return m.Mentor.Name
 }
 
 func(m *Mentorship) GetEmails() []string {
@@ -23,6 +23,10 @@ func(m *Mentorship) GetEmails() []string {
 	}
 	emails = append(emails, m.Mentor.Email)
 	return emails
+}
+
+func(m *Mentorship) String() string {
+	return fmt.Sprintf("%s:%+v",m.GetMentorNames(), m.GetEmails())
 }
 
 type Mentee struct {
