@@ -7,6 +7,12 @@ type Person struct {
 	Email string `json:"Email"`
 }
 
+type BasicMentorship interface {
+	GetEmails() []string
+	String() string
+	GetMentorNames() string
+}
+
 type Mentorship struct {
 	Mentor  *Person
 	Mentees []*Mentee

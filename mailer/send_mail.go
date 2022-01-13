@@ -46,7 +46,7 @@ func getTemplate(name string) (*template.Template, error) {
 	return template.ParseFiles(name)
 }
 
-func (sender *Sender) writeEmail(dest []string, contentType, subject string, bodyMessage *extractor.Mentorship) []byte {
+func (sender *Sender) writeEmail(dest []string, contentType, subject string, bodyMessage extractor.BasicMentorship, template string) []byte {
 
 	receipient := strings.Join(dest, ",")
 	header := make(map[string]string)
@@ -62,7 +62,7 @@ func (sender *Sender) writeEmail(dest []string, contentType, subject string, bod
 		message.WriteString(fmt.Sprintf("%s: %s\r\n", key, value))
 	}
 
-	t, err := getTemplate("template.html")
+	t, err := getTemplate(template)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -75,6 +75,6 @@ func (sender *Sender) writeEmail(dest []string, contentType, subject string, bod
 	return message.Bytes()
 }
 
-func (sender *Sender) WriteHTMLEmail(dest []string, subject string, bodyMessage *extractor.Mentorship) []byte {
-	return sender.writeEmail(dest, "text/html", subject, bodyMessage)
+func (sender *Sender) WriteHTMLEmail(dest []string, subject string, bodyMessage extractor.BasicMentorship, template string) []byte {
+	return sender.writeEmail(dest, "text/html", subject, bodyMessage, template)
 }
