@@ -1,0 +1,65 @@
+<!-- template.html -->
+<!DOCTYPE html>
+<html>
+
+  <body>
+    <p>Hi mentor &amp; students,</p>
+
+    <p>As you know, COPS IIT (BHU) has started a GSoC Mentorship program where all the Ex-GSoCers of IIT BHU have come
+      together to mentor the students for GSoC ‘22. We are thankful to <b>{{.GetMentorNames}}</b> (the
+      mentors
+      for this
+      group) for
+      agreeing to be a part of our GSoC mentorship program and giving their precious time to mentor the students.</p>
+
+    <p>The following students are present in this group, and their details are as mentioned below:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Name </th>
+          <th>Email address </th>
+          <th>Year </th>
+          <th>Contact </th>
+          <th>Github Handle </th>
+        </tr>
+      </thead>
+      <tbody>
+        {{range .Mentees}}
+        <tr>
+          <td>{{.Name}}</td>
+          <td style="text-align: center;"><a href="mailto:{{.Email}}" target="_blank">{{.Email}}</a></td>
+          <td>{{.Year}}</td>
+          <td>{{.Contact}}</td>
+          <td style="text-align: center;"><a href="https://github.com/{{.Github}}" target="_blank"
+              rel="noreferrer">{{.Github}}</a></td>
+        </tr>
+        <tr>
+          <td> </td>
+          <td> </td>
+          <td> </td>
+          <td> </td>
+        </tr>
+        {{end}}
+      </tbody>
+    </table>
+
+    <p>We also have a <b>discord server</b> where all the mentors are already invited. Please take a note this
+      <b>group's ID is
+        {{.ID}}</b> you need to assign youself the same role in discord server. You all are requested to join the
+      <a href="https://discord.gg/689y8CPwQK" target="_blank" rel="noreferrer">disocrd server</a> and introduce
+      yourself in the group specific channel only.
+    </p>
+
+    <p>Lastly, we have created a document outlining the program structure, timeline, and standard operating procedures
+      for GSoC 2022. Please make sure to read this <a
+        href="https://docs.google.com/document/d/1z0omXgE5lQvL6qOM2rqBQGLm1d0F1_K7mjU6uFJ3mig/edit?usp=sharing"
+        target="_blank">document carefully.</a>
+    </p>
+    <p>
+      Thanks and Regards,<br>
+      Club of Programmers, IIT (BHU) Varanasi
+    </p>
+  </body>
+
+</html>

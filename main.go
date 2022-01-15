@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"github.com/joho/godotenv"
-	"github.com/king-11/mentorship/excluder"
 	"github.com/king-11/mentorship/extractor"
 	"github.com/king-11/mentorship/mailer"
 )
@@ -37,35 +36,15 @@ func main() {
     log.Fatal(err)
   }
 
-  fe, err := os.Open("mentees_1.json")
-  if err != nil {
-    log.Fatal(err)
-  }
-  defer fe.Close()
-  mentees_done, err := excluder.GetMentees(fe)
-  if err != nil {
-    log.Fatal(err)
-  }
-
-
   mentees := make([]*extractor.Mentee, 0)
   for _, val := range mentees_all {
-    check := false
-    if strings.Contains(val.Email, ",") {
+    if !strings.Contains(val.Mentor, ",") {
       continue
     }
-    for _, v := range mentees_done {
-      if val.Email == v {
-        check = true
-        break
-      }
-    }
 
-    if !check {
-      mentees = append(mentees, val)
-    }
+    mentees = append(mentees, val)
   }
-  mentorships := extractor.SetUpMentorship(mentees, mentors)
+  mentorships := extractor.SetupMultiMentorship(mentees, mentors)
 
   err = godotenv.Load(".env")
   if err != nil {
@@ -77,8 +56,8 @@ func main() {
   sender := mailer.NewSender(FROM, PASSWORD)
   for _, val :=  range mentorships {
     // write html email
-    // body := sender.WriteHTMLEmail(val.GetEmails(), "GSOC", val)
-    // tempFile, err := os.Create("htmls/" + val.Mentor.Name + ".html")
+    // body := sender.WriteHTMLEmail(val.GetEmails(), "GSOC", val, "template-multi.html")
+    // tempFile, err := os.Create("htmls/" + fmt.Sprintf("%d-group", i) + ".html")
     // if err != nil {
     //   log.Fatal(err)
     // }
@@ -86,10 +65,10 @@ func main() {
     // tempFile.Write(body)
 
     // send mail
-    err := sender.MentorshipMail(val)
+    err := sender.MentorshipMail(val, "template-multi.html")
     if err != nil {
       log.Fatal(err)
     }
-    log.Printf("Sent mail to group %v\n", val)
+    log.Println("Sent mail to group", val.GetMentorNames(), len(val.Mentees))
   }
 }
